@@ -70,6 +70,8 @@ will work just fine.
 
 After you push, Git Bash will return a link pointing to the **pull request (PR)** on GitHub. Then, follow the link, submit your PR, and you're done!
 
+In general, as long as you always create new branches for any changes you make and don't push into main directly you shouldn't run into any issues.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
