@@ -19,10 +19,11 @@ I highly recommend referring to this guide for any definitions or questions: htt
 
 As for the following commands, they are meant to be used in **Git Bash**.
 
-#### Cloning a repository
+#### Cloning the repository
 
+Go to any local directory of your choice and then run:
 ```
-git clone </path/to/repository>
+git clone https://github.com/alec0322/fiu_csl_checkin
 ```
 
 #### Creating a branch
@@ -84,3 +85,11 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+#### Run the application
+
+Go into the directory in which you cloned the repo and run:
+```
+flutter run
+```
+Once you have Android Studio set up, this command will launch the Android Virtual Device emulator and display the application.
