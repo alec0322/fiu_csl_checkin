@@ -61,7 +61,7 @@ git commit -m <my-commit-message>
 
 After committing, your changes have to be pushed into the remote repository, when pushing into a branch for the first time use:
 ```
-git push --set-upstream origin 
+git push --set-upstream origin <my-new-branch>
 ```
 If you have pushed into said branch previously...
 ```
