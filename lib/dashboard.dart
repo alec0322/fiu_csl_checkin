@@ -2,6 +2,7 @@
 // Main page the user will see when logged in.
 
 import 'package:flutter/material.dart';
+import 'QR_Scanner.dart';
 
 class Dashboard extends StatelessWidget {
 
@@ -22,7 +23,10 @@ class Dashboard extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Implement checkout logic here
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QRScannerScreen()),
+                );
               },
               child: const Text('Item Check Out'),
             ),            ElevatedButton(
