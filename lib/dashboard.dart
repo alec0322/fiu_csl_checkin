@@ -19,7 +19,23 @@ class Dashboard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                // Implement checkout logic here
+                Navigator.pop(context);
+              },
+              child: const Text('Item Check Out'),
+            ),            ElevatedButton(
+              onPressed: () {
+                // Implement item return logic here
+                Navigator.pop(context);
+              },
+              child: const Text('Return Items'),
+            ),
+            const SizedBox(height: 450),
+
             const Text(
+
               'Successfully Logged In!',
               style: TextStyle(
                 fontSize: 20.0,
