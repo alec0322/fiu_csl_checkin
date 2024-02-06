@@ -2,6 +2,7 @@
 // Main page the user will see when logged in.
 
 import 'package:flutter/material.dart';
+import 'QR_Scanner.dart';
 
 class Dashboard extends StatelessWidget {
 
@@ -19,7 +20,26 @@ class Dashboard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                // Implement checkout logic here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QRScannerScreen()),
+                );
+              },
+              child: const Text('Item Check Out'),
+            ),            ElevatedButton(
+              onPressed: () {
+                // Implement item return logic here
+                Navigator.pop(context);
+              },
+              child: const Text('Return Items'),
+            ),
+            const SizedBox(height: 450),
+
             const Text(
+
               'Successfully Logged In!',
               style: TextStyle(
                 fontSize: 20.0,
