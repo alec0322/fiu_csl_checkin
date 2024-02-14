@@ -3,7 +3,6 @@
 
 import 'package:flutter/material.dart';
 import 'QR_Scanner.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Dashboard extends StatelessWidget {
@@ -28,19 +27,6 @@ class Dashboard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => QRScannerScreen()),
-                ).then((scannedData) {
-                  if (scannedData != null) {
-                    List<String> data = scannedData.split(" ");
-
-                    SharedPreferences.getInstance().then((prefs) {
-                      // This is where we will store the data from the QR code
-                        prefs.setString('name', data[0]);
-                        prefs.setString('id', data[1]);
-
-                      }
-                    );
-                    }
-                  }
                 );
               },
               child: const Text('Item Check Out'),
