@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'QR_Scanner.dart';
 
+
 class Dashboard extends StatelessWidget {
 
   const Dashboard({super.key});
