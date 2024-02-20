@@ -45,3 +45,67 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
+class CustomTextButton extends StatelessWidget {
+
+  final String text;
+  final VoidCallback onPressed;
+  final Widget pageRoute;
+
+  // The button can optionally be attached to a list of controllers
+  final List<TextEditingController>? controllers;
+
+  const CustomTextButton({
+    Key? key,
+    required this.text,
+    required this.onPressed,
+    required this.pageRoute,
+    this.controllers,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      width: 100,
+      child: TextButton(
+        onPressed: () {
+
+          // If controllers are passed, we check if they are all filled prior to routing the user
+          if (controllers != null) {
+            bool allFilled = true;
+            for (TextEditingController? controller in controllers!) {
+              if (controller == null || controller.text.isEmpty) {
+                allFilled = false;
+                break;
+              }
+            }
+            
+            if (allFilled) {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute));
+            }
+            
+          // If controllers aren't passed, we assume the button isn't conditional
+          } else {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute));
+          }          
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 33, 66, 116)),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0)
+            ),
+          ),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16
+          ),
+        ),
+      ),
+    );
+  }
+}
