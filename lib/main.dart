@@ -3,6 +3,7 @@
 // be asked to login.
 
 import 'package:flutter/material.dart';
+import 'widgets.dart';
 import 'login.dart';
 
 void main() {
@@ -16,7 +17,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'FIU CSL Check-in',
       theme: ThemeData(
@@ -35,37 +35,26 @@ class MyApp extends StatelessWidget {
           ),
           backgroundColor: const Color.fromARGB(255, 8, 30, 63)
         ),
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Image(image: AssetImage('assets/fiu_roary.png')),
-              SizedBox(height: 30),
-              LoginButton()
+            children: [
+              const Image(image: AssetImage('assets/fiu_roary.png')),
+
+              const SizedBox(height: 30),
+              
+              CustomTextButton(
+                text: 'Log in',
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
+                },
+                pageRoute: const LoginPage(),
+              )
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-// Redirects the user to login page (login.dart)
-class LoginButton extends StatelessWidget {
-
-  const LoginButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      },
-      child: const Text('Log in')
     );
   }
 }
