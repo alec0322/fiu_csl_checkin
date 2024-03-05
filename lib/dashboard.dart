@@ -6,57 +6,63 @@ import 'qr_scanner.dart';
 
 
 class Dashboard extends StatelessWidget {
+  const Dashboard({Key? key}) : super(key: key);
 
-  const Dashboard({super.key});
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: const Color.fromARGB(255, 33, 66, 116),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                // Implement checkout logic here
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const QRScannerScreen()),
-                );
-              },
-              child: const Text('Item Check Out'),
-            ),            
-            ElevatedButton(
-              onPressed: () {
-                // Implement item return logic here
-                Navigator.pop(context);
-              },
-              child: const Text('Return Items'),
-            ),
-            const SizedBox(height: 450),
-
-            const Text(
-              'Successfully Logged In!',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+      backgroundColor: const Color.fromARGB(255, 8, 30, 63),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 30),
+              const Text(
+                'Successfully Logged In!',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement logout logic here
-                print('Log out button pressed');
-                // Example: Navigate back to the login screen
-                Navigator.pop(context);
-              },
-              child: const Text('Log out'),
-            ),
-          ],
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () {
+                  print('Log out button pressed');
+                  Navigator.pop(context);
+                },
+                child: const Text('Log out'),
+              ),
+              const SizedBox(height: 120),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QRScannerScreen()),
+                  );
+                },
+                child: const Text('Item Check Out'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Return Items'),
+              ),
+              const SizedBox(height: 80),              
+            ],
+          ),
         ),
       ),
     );

@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         onChanged: onChanged,
         controller: controller,
-        obscureText: hintText.toLowerCase() == 'password',
+        obscureText: hintText.toLowerCase() == 'password' || hintText.toLowerCase() == 'confirm password',
         decoration: InputDecoration(
           hintText: hintText,
           enabledBorder: const OutlineInputBorder(
@@ -83,6 +83,17 @@ class CustomTextButton extends StatelessWidget {
             
             if (allFilled) {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute));
+            }
+            else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Error'),
+                    content: Text('Please fill in all fields'),
+                  );
+                },
+              );
             }
             
           // If controllers aren't passed, we assume the button isn't conditional
