@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.bold
             ),
           ),
-          backgroundColor: const Color.fromARGB(255, 8, 30, 63)
+          backgroundColor: const Color.fromARGB(255, 33, 66, 116),
         ),
         body: Center(
           child: Column(
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             children: [
               const Image(image: AssetImage('assets/fiu_roary.png')),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 60),
               
               CustomTextButton(
                 text: 'Log in',

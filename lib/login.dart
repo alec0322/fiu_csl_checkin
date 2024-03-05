@@ -2,6 +2,7 @@
 // Login page of the application.
 
 import 'package:flutter/material.dart';
+import 'main.dart';
 import 'widgets.dart';
 import 'dashboard.dart';
 import 'signup.dart';
@@ -29,8 +30,14 @@ class _LoginPage extends State<LoginPage> {
           'Back to home',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MyApp()));
+          },
+        ),
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: const Color.fromARGB(255, 8, 30, 63),
+        backgroundColor: const Color.fromARGB(255, 33, 66, 116),
       ),
       body: SingleChildScrollView(
         child: Container(

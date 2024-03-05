@@ -1,6 +1,7 @@
 // signup.dart
 // Signup page of the application
 
+import 'package:fiu_csl_checkin/login.dart';
 import 'package:flutter/material.dart';
 import 'widgets.dart';
 
@@ -19,10 +20,13 @@ class _SignupPage extends State<SignupPage> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordConfirmationController = TextEditingController();
 
   int _currentStep = 0;
   bool _step1Complete = false;
   bool _step2Complete = false;
+  bool _step3Complete = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class _SignupPage extends State<SignupPage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: const Color.fromARGB(255, 8, 30, 63),
+        backgroundColor: const Color.fromARGB(255, 33, 66, 116),
       ),
       body: Stepper(
         currentStep: _currentStep,
@@ -51,7 +55,7 @@ class _SignupPage extends State<SignupPage> {
                 builder: (BuildContext context) {
                   return const AlertDialog(
                     title: Text('Error'),
-                    content: Text('Please input both first and last name'),
+                    content: Text('Please input both your first and last name'),
                   );
                 }
               );
@@ -73,10 +77,57 @@ class _SignupPage extends State<SignupPage> {
                 }
               );
             }
-          } else {
-            // Perform final step actions here
-            // For example, submite form data
-            _submitForm();
+          } else if (_currentStep == 2) {
+            if (passwordController.text.isNotEmpty && passwordConfirmationController.text.isNotEmpty) {
+              if (passwordController.text != passwordConfirmationController.text) {
+                showDialog(
+                  context: context, 
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      title: Text('Error'),
+                      content: Text('Passwords do not match'),
+                    );
+                  }
+                );   
+              } else {
+                setState(() {
+                  _step3Complete = true;
+                });
+              }      
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const AlertDialog(
+                    title: Text('Error'),
+                    content: Text('Please input matching passwords')
+                  );
+                }
+              );
+            }
+          } 
+                    
+          if (_step1Complete && _step2Complete && _step3Complete) {
+            // Perform final step actions here            
+            _submitForm();            
+            showDialog(
+              context: context, 
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('All done!'),
+                  content: Text('Your account has been successfully created'),
+                  actions: <Widget>[
+                    CustomTextButton(
+                      text: 'Log in', 
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
+                      }, 
+                      pageRoute: const LoginPage(),
+                    )
+                  ],
+                );
+              }
+            );
           }
         },
         onStepCancel: () {
@@ -109,9 +160,7 @@ class _SignupPage extends State<SignupPage> {
                   )
                 ),
               ),
-
-              const SizedBox(width: 15),
-              
+              const SizedBox(width: 15),              
               ElevatedButton(
                 onPressed: details.onStepCancel,
                 style: ButtonStyle(
@@ -148,14 +197,11 @@ class _SignupPage extends State<SignupPage> {
                   hintText: 'First Name',
                   controller: firstNameController,
                 ),
-                  
                 const SizedBox(height: 20),
-
                 CustomTextField(
                   hintText: 'Last Name',
                   controller: lastNameController,                  
                 ),
-
                 const SizedBox(height: 20)
               ],
             ),
@@ -176,20 +222,42 @@ class _SignupPage extends State<SignupPage> {
                   hintText: 'Username',
                   controller: usernameController,                  
                 ),
-
                 const SizedBox(height: 20),
-
                 CustomTextField(
                   hintText: 'Email',
-                  controller: emailController,                  
+                  controller: emailController,                 
                 ),
-
                 const SizedBox(height: 20),
               ],
             ),
             isActive: _currentStep == 1,
             state: _step2Complete ? StepState.indexed : StepState.disabled,
           ),
+          Step (
+            title: const Text(
+              'Create Password',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0
+              )
+            ),
+            content: Column(
+              children: [
+                CustomTextField(
+                  hintText: 'Password',
+                  controller: passwordController,
+                ),
+                const SizedBox(height: 20),
+                CustomTextField(
+                  hintText: 'Confirm Password', 
+                  controller: passwordConfirmationController
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+            isActive: _currentStep == 2,
+            state: _step3Complete ? StepState.indexed : StepState.disabled,
+          )
         ],
       ),
     );
@@ -197,11 +265,12 @@ class _SignupPage extends State<SignupPage> {
 
   void _submitForm() {
     // Perform form submission logic here
-    // For example, print the entered data
     print('First Name: ${firstNameController.text}');
     print('Last Name: ${lastNameController.text}');
     print('Username: ${usernameController.text}');
     print('Email: ${emailController.text}');
+    print('Password: ${passwordController.text}');
+    print('Confirm Password: ${passwordConfirmationController.text}');
   }
 
   @override
@@ -210,6 +279,8 @@ class _SignupPage extends State<SignupPage> {
     lastNameController.dispose();
     usernameController.dispose();
     emailController.dispose();
+    passwordController.dispose();
+    passwordConfirmationController.dispose();
     super.dispose();
   }
 }
