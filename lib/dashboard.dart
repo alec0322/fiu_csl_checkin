@@ -2,8 +2,9 @@
 // Main page the user will see when logged in.
 
 import 'package:flutter/material.dart';
+import 'login.dart';
 import 'qr_scanner.dart';
-
+import 'widgets.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -36,29 +37,28 @@ class Dashboard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              ElevatedButton(
+              CustomTextButton(
+                text: 'Log out', 
                 onPressed: () {
-                  print('Log out button pressed');
-                  Navigator.pop(context);
-                },
-                child: const Text('Log out'),
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
+                }, 
+                pageRoute: const LoginPage(),
               ),
               const SizedBox(height: 120),
-              ElevatedButton(
+              CustomTextButton(
+                text: 'Item check out', 
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => QRScannerScreen()),
-                  );
-                },
-                child: const Text('Item Check Out'),
-              ),
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => QRScannerScreen()));
+                }, 
+                pageRoute: QRScannerScreen(),
+              ),              
               const SizedBox(height: 10),
-              ElevatedButton(
+              CustomTextButton(
+                text: 'Return items', 
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => QRScannerScreen()));
                 },
-                child: const Text('Return Items'),
+                pageRoute: QRScannerScreen(),
               ),
               const SizedBox(height: 80),              
             ],
