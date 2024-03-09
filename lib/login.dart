@@ -2,6 +2,7 @@
 // Login page of the application.
 
 import 'package:flutter/material.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'main.dart';
 import 'widgets.dart';
 import 'dashboard.dart';
@@ -68,17 +69,43 @@ class _LoginPage extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomTextButton(
-                      text: 'Log in',
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
-                      },
-                      pageRoute: const Dashboard(),
-                      controllers: [usernameController, passwordController],
-                    ), 
-                    
+                    SizedBox(
+                      height: 50,
+                      width: 100,
+                      child: TextButton(
+                        child: const Text(
+                          'Log in',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16
+                          ),
+                        ),
+                        onPressed: () {
+                          if (usernameController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+                            userLogin();
+                          } else {
+                            showDialog(
+                              context: context, 
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Error'),
+                                  content: Text('Please input both username and password'),
+                                );
+                              }
+                            );  
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 33, 66, 116)),
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     const Spacer(),
-
                     CustomTextButton(
                       text: 'Sign up', 
                       onPressed: () {
@@ -94,5 +121,35 @@ class _LoginPage extends State<LoginPage> {
         ),
       )
     );
+  }
+
+  void userLogin() async {
+    final username = usernameController.text.trim();
+    final password = passwordController.text.trim();
+
+    final user = ParseUser(username, password, null);
+
+    var response = await user.login();
+
+    if (response.success) {
+      setState(() {});
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
+    } else {
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(response.error!.message),
+          );
+        }
+      );   
+    }
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
   }
 }

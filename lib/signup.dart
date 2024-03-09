@@ -3,6 +3,7 @@
 
 import 'package:fiu_csl_checkin/login.dart';
 import 'package:flutter/material.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'widgets.dart';
 
 class SignupPage extends StatefulWidget {
@@ -108,26 +109,7 @@ class _SignupPage extends State<SignupPage> {
           } 
                     
           if (_step1Complete && _step2Complete && _step3Complete) {
-            // Perform final step actions here            
-            _submitForm();            
-            showDialog(
-              context: context, 
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('All done!'),
-                  content: Text('Your account has been successfully created'),
-                  actions: <Widget>[
-                    CustomTextButton(
-                      text: 'Log in', 
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
-                      }, 
-                      pageRoute: const LoginPage(),
-                    )
-                  ],
-                );
-              }
-            );
+            registerUser();            
           }
         },
         onStepCancel: () {
@@ -263,14 +245,52 @@ class _SignupPage extends State<SignupPage> {
     );
   }
 
-  void _submitForm() {
-    // Perform form submission logic here
-    print('First Name: ${firstNameController.text}');
-    print('Last Name: ${lastNameController.text}');
-    print('Username: ${usernameController.text}');
-    print('Email: ${emailController.text}');
-    print('Password: ${passwordController.text}');
-    print('Confirm Password: ${passwordConfirmationController.text}');
+  void registerUser() async {
+    final firstName = firstNameController.text.trim();
+    final lastName = lastNameController.text.trim();
+    final username = usernameController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    // Create a new ParseUser object
+    final user = ParseUser.createUser(username, password, email);
+
+    // Set additional necessary fields
+    user.set<String>('firstName', firstName);
+    user.set<String>('lastName', lastName);
+
+    var response = await user.signUp();
+
+    if (response.success) {
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('All done!'),
+            content: Text('Your account has been successfully created'),
+            actions: <Widget>[
+              CustomTextButton(
+                text: 'Log in', 
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
+                }, 
+                pageRoute: const LoginPage(),
+              )
+            ],
+          );
+        }
+      );
+    } else {
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(response.error!.message),
+          );
+        }
+      );   
+    }
   }
 
   @override
