@@ -3,10 +3,19 @@
 // be asked to login.
 
 import 'package:flutter/material.dart';
+import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'widgets.dart';
 import 'login.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final keyApplicationId = 'h5XaqSeulft0D8Chkuk4LmaGFdkhcpR0MzVj8Jgm';
+  final keyClientKey = 't56zEH1VUF0MYCnQOyxaGFzfrMThx6UjCISRecnh';
+  final keyParseServerUrl = 'https://parseapi.back4app.com';
+
+  await Parse().initialize(keyApplicationId, keyParseServerUrl,
+    clientKey: keyClientKey, autoSendSessionId: true);
+
   runApp(const MyApp());
 }
 
