@@ -141,26 +141,7 @@ class _SignupPage extends State<SignupPage> {
         },
         controlsBuilder: (BuildContext context, ControlsDetails details) {
           return Row(
-            children: [
-              ElevatedButton(
-                onPressed: details.onStepContinue,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 33, 66, 116)),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)
-                    ),
-                  ),
-                ),
-                child: const Text(
-                  'Next',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  )
-                ),
-              ),
-              const SizedBox(width: 15),              
+            children: [              
               ElevatedButton(
                 onPressed: details.onStepCancel,
                 style: ButtonStyle(
@@ -173,6 +154,25 @@ class _SignupPage extends State<SignupPage> {
                 ),
                 child: const Text(
                   'Back',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  )
+                ),
+              ),
+              const SizedBox(width: 15),
+              ElevatedButton(
+                onPressed: details.onStepContinue,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 33, 66, 116)),
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0)
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'Next',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
