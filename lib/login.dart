@@ -28,7 +28,7 @@ class _LoginPage extends State<LoginPage> {
       backgroundColor: const Color.fromARGB(255, 8, 30, 63),
       appBar: AppBar(
         title: const Text(
-          'Back to home',
+          'Welcome!',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
@@ -65,7 +65,7 @@ class _LoginPage extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

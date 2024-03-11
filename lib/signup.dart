@@ -4,6 +4,7 @@
 import 'package:fiu_csl_checkin/login.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+import 'login.dart';
 import 'widgets.dart';
 
 class SignupPage extends StatefulWidget {
@@ -35,8 +36,14 @@ class _SignupPage extends State<SignupPage> {
       backgroundColor: const Color.fromARGB(255, 8, 30, 63),
       appBar: AppBar(
         title: const Text(
-          'Back to login',
+          'Sign up',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
+          },
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color.fromARGB(255, 33, 66, 116),
@@ -106,8 +113,7 @@ class _SignupPage extends State<SignupPage> {
                 }
               );
             }
-          } 
-                    
+          }                    
           if (_step1Complete && _step2Complete && _step3Complete) {
             registerUser();            
           }
