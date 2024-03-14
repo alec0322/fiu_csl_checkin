@@ -277,9 +277,6 @@ class _SignupPage extends State<SignupPage> {
             actions: <Widget>[
               CustomTextButton(
                 text: 'Log in', 
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
-                }, 
                 pageRoute: const LoginPage(),
               )
             ],

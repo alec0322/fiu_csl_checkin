@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'qr_scanner.dart';
 import 'widgets.dart';
+import 'Confirmation_Screen.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -18,13 +20,8 @@ class Dashboard extends StatelessWidget {
           'Dashboard',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
-          },
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 33, 66, 116),
       ),
       backgroundColor: const Color.fromARGB(255, 8, 30, 63),
@@ -32,41 +29,88 @@ class Dashboard extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 30),
-              const Text(
-                'Successfully Logged In!',
+            children: [              
+              const SizedBox(height: 110),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomInkWell(
+                    text: 'My Devices',
+                    height: 150,
+                    width: 150,
+                    imgPath: 'assets/devices.png',
+                    imgSize: 90,
+                    topPadding: 7,
+                    leftPadding: 13,
+                    pageRoute: ConfirmationPage(scannedData: '')
+                  ),
+                  const SizedBox(width: 20),
+                  CustomInkWell(
+                    text: 'Check-out',
+                    height: 150,
+                    width: 150,
+                    imgPath: 'assets/cart.png',
+                    imgSize: 85,
+                    topPadding: 10,
+                    leftPadding: 11,
+                    pageRoute: QRScannerScreen()
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomInkWell(
+                    text: 'Return device',
+                    height: 150,
+                    width: 150,
+                    imgPath: 'assets/undo.png',
+                    imgSize: 70,
+                    topPadding: 13,
+                    leftPadding: 27,
+                    pageRoute: QRScannerScreen()
+                  ),
+                  const SizedBox(width: 20),
+                  CustomInkWell(
+                    text: 'Log out',
+                    height: 150,
+                    width: 150,
+                    imgPath: 'assets/logout.png',
+                    imgSize: 65,
+                    topPadding: 15,
+                    leftPadding: 30,
+                    pageRoute: LoginPage()
+                  ),
+                ],
+              ),
+              SizedBox(height: 80),
+              Text(
+                'For information on the CSL lab,',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20.0,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 15),
-              CustomTextButton(
-                text: 'Log out', 
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
-                }, 
-                pageRoute: const LoginPage(),
-              ),
-              const SizedBox(height: 120),
-              CustomTextButton(
-                text: 'Item check out', 
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => QRScannerScreen()));
-                }, 
-                pageRoute: QRScannerScreen(),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'please visit: ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  HyperlinkText(
+                    text: 'https://csl.fiu.edu',
+                    url: 'https://csl.fiu.edu',
+                  )
+                ],
               ),              
-              const SizedBox(height: 10),
-              CustomTextButton(
-                text: 'Return items', 
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => QRScannerScreen()));
-                },
-                pageRoute: QRScannerScreen(),
-              ),
-              const SizedBox(height: 80),              
             ],
           ),
         ),

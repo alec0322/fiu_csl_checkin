@@ -65,57 +65,58 @@ class _LoginPage extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 35.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: 50,
-                      width: 100,
-                      child: TextButton(
-                        child: const Text(
-                          'Log in',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: TextButton(
+                          child: const Text(
+                            'Log in',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          if (usernameController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-                            userLogin();
-                          } else {
-                            showDialog(
-                              context: context, 
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Error'),
-                                  content: Text('Please input both username and password'),
-                                );
-                              }
-                            );  
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 33, 66, 116)),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0)
+                          onPressed: () {
+                            if (usernameController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+                              userLogin();
+                            } else {
+                              showDialog(
+                                context: context, 
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Error'),
+                                    content: Text('Please input both username and password'),
+                                  );
+                                }
+                              );  
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 33, 66, 116)),
+                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    CustomTextButton(
-                      text: 'Sign up', 
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
-                      }, 
-                      pageRoute: const SignupPage(),
+                    const SizedBox(width: 25),
+                    Expanded(
+                      child: CustomTextButton(
+                        text: 'Sign up', 
+                        pageRoute: const SignupPage(),
+                      ),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

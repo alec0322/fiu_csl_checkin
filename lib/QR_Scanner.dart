@@ -23,7 +23,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       backgroundColor: const Color.fromARGB(255, 8, 30, 63),
       appBar: AppBar(
         title: Text(
-          'Scan an item...',
+          'Scan a device...',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
         ),
         leading: IconButton(

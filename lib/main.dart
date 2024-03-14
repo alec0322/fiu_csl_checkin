@@ -42,25 +42,24 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.bold
             ),
           ),
+          centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 33, 66, 116),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Image(image: AssetImage('assets/fiu_roary.png')),
-
-              const SizedBox(height: 60),
-              
-              CustomTextButton(
-                text: 'Log in',
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginPage()));
-                },
-                pageRoute: const LoginPage(),
-              )
-            ],
+        body: Container(
+          color: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(image: AssetImage('assets/cslLabLogo.png'), height: 250, width: 250),
+                const SizedBox(height: 60),              
+                CustomTextButton(
+                  text: 'Log in',
+                  pageRoute: const LoginPage(),
+                )
+              ],
+            ),
           ),
         ),
       ),
