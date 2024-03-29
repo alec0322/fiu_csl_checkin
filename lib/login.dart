@@ -3,10 +3,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'main.dart';
 import 'widgets.dart';
+import 'main.dart';
 import 'dashboard.dart';
 import 'signup.dart';
+import 'id_scanner.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -65,7 +66,7 @@ class _LoginPage extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -107,7 +108,7 @@ class _LoginPage extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 25),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: CustomTextButton(
                         text: 'Sign up', 
@@ -117,6 +118,23 @@ class _LoginPage extends State<LoginPage> {
                   ],
                 ),
               ),
+              const SizedBox(height: 130),
+              Center(
+                child: Text(
+                  'If you have an FIU One Card, there is no need for you to make an account',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              CustomTextButton(
+                text: 'I have an FIU One Card',
+                pageRoute: const IDScanner(),
+              )
             ],
           ),
         ),
@@ -146,11 +164,5 @@ class _LoginPage extends State<LoginPage> {
         }
       );   
     }
-  }
-
-  @override
-  void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
   }
 }

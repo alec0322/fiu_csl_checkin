@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'widgets.dart';
 import 'login.dart';
+import 'dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,11 +54,11 @@ class MyApp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Image(image: AssetImage('assets/cslLabLogo.png'), height: 250, width: 250),
-                const SizedBox(height: 60),              
+                const SizedBox(height: 80),              
                 CustomTextButton(
                   text: 'Log in',
                   pageRoute: const LoginPage(),
-                )
+                ),
               ],
             ),
           ),

@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'qr_scanner.dart';
 import 'widgets.dart';
-import 'Confirmation_Screen.dart';
+import 'checkout_confirmation.dart';
+import 'user_devices.dart';
 
 class Dashboard extends StatelessWidget {
+
   const Dashboard({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(BuildContext context) {    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -42,7 +43,7 @@ class Dashboard extends StatelessWidget {
                     imgSize: 90,
                     topPadding: 7,
                     leftPadding: 13,
-                    pageRoute: ConfirmationPage(scannedData: '')
+                    pageRoute: UserDevices()
                   ),
                   const SizedBox(width: 20),
                   CustomInkWell(
@@ -110,7 +111,7 @@ class Dashboard extends StatelessWidget {
                     url: 'https://csl.fiu.edu',
                   )
                 ],
-              ),              
+              ),
             ],
           ),
         ),

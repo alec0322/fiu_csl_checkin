@@ -162,6 +162,7 @@ class CustomTextField extends StatelessWidget {
 class CustomTextButton extends StatelessWidget {
 
   final String text;
+  final double? width;
   final Widget pageRoute;
 
   // The button can optionally be attached to a list of controllers
@@ -170,6 +171,7 @@ class CustomTextButton extends StatelessWidget {
   const CustomTextButton({
     Key? key,
     required this.text,
+    this.width,
     required this.pageRoute,
     this.controllers,
   }) : super(key: key);
@@ -178,7 +180,7 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
-      width: text.length <= 10 ? 100 : null,
+      width: width ?? (text.length <= 10 ? 100 : null),
       child: TextButton(
         onPressed: () {
 
