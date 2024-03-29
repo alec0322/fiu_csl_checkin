@@ -2,7 +2,7 @@
 // and asking if the user is sure they wish to check out the item
 
 import 'package:flutter/material.dart';
-import 'QR_Scanner.dart';
+import 'qr_scanner.dart';
 import 'dashboard.dart';
 import 'widgets.dart';
 

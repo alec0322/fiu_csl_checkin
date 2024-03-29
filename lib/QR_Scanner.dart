@@ -1,6 +1,4 @@
-import 'dart:async';
-
-import 'package:fiu_csl_checkin/Confirmation_Screen.dart';
+import 'package:fiu_csl_checkin/checkout_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dashboard.dart';
