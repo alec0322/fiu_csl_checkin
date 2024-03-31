@@ -2,17 +2,18 @@
 // and asking if the user is sure they wish to check out the item
 
 import 'package:flutter/material.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'qr_scanner.dart';
 import 'dashboard.dart';
 import 'widgets.dart';
 
 class ConfirmationPage extends StatefulWidget {
 
-  final String scannedData;
+  final ParseObject device;
 
   const ConfirmationPage({
     Key? key,
-    required this.scannedData,
+    required this.device,
   }) : super(key: key);
 
   @override
@@ -21,11 +22,26 @@ class ConfirmationPage extends StatefulWidget {
 
 class _ConfirmationPage extends State<ConfirmationPage> {
 
+  late ParseUser currentUser;
+
   TextEditingController rentalDaysController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    getCurrentUser();
+    print('Current device: ${widget.device}');
+  }
 
+  void getCurrentUser() async {
+    ParseUser user = await ParseUser.currentUser();
+    setState(() {
+      currentUser = user;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 8, 30, 63),
       appBar: AppBar(
@@ -39,7 +55,7 @@ class _ConfirmationPage extends State<ConfirmationPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const QRScannerScreen()));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const QRScannerScreen(isReturn: false)));
           },
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -54,7 +70,7 @@ class _ConfirmationPage extends State<ConfirmationPage> {
             children: [
               Center(
                 child: Text(
-                  'Scanned device: *ITEM NAME* ${widget.scannedData}',
+                  'Scanned device:\n${widget.device.get<String>('deviceName')}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -69,7 +85,6 @@ class _ConfirmationPage extends State<ConfirmationPage> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold
                   ),
                 ),
               ),
@@ -97,8 +112,30 @@ class _ConfirmationPage extends State<ConfirmationPage> {
                 SizedBox(height: 30),
                 CustomTextButton(
                   text: 'Confirm',
-                  // IMPLEMENT 'onTap' LOGIC TO PROCESS USER RENTAL ON DATABASE
-                  pageRoute: Dashboard(),
+                  onPressed: () {
+                    print('Renting...');
+                    rentDevice(currentUser, widget.device);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Success'),
+                          content: Text('You have successfully rented the ${widget.device['deviceName']}'),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                // Close the dialog
+                                Navigator.of(context).pop();
+                                // Redirect the user to the dashboard
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard()));
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },         
                 ),
               ],
             ],
@@ -106,5 +143,30 @@ class _ConfirmationPage extends State<ConfirmationPage> {
         ),
       ),
     );
+  }
+
+  Future<void> rentDevice(ParseUser user, ParseObject device) async {
+     try {
+      device..set('currentRenter', user.objectId);
+
+      // Calculate rental time based on given rental days
+      int rentalDays = int.parse(rentalDaysController.text.trim());
+      DateTime startDate = DateTime.now();
+      DateTime endDate = startDate.add(Duration(days: rentalDays));
+
+      device..set('rentedOn', startDate);
+      device..set('rentedUntil', endDate);
+
+      final ParseResponse updateResponse = await device.save();
+
+      if (updateResponse.success) {
+        print('Device updated successfully: ${updateResponse.result}');
+      } else {
+        print('Error updating object: ${updateResponse.error}');
+      }
+    }
+    catch (e) {
+      throw Exception('Error querying the database: $e');
+    }
   }
 }
