@@ -2,18 +2,20 @@
 // Main page the user will see when logged in.
 
 import 'package:flutter/material.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'login.dart';
 import 'qr_scanner.dart';
 import 'widgets.dart';
-import 'checkout_confirmation.dart';
 import 'user_devices.dart';
 
 class Dashboard extends StatelessWidget {
 
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({
+    Key? key
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -41,7 +43,7 @@ class Dashboard extends StatelessWidget {
                     width: 150,
                     imgPath: 'assets/devices.png',
                     imgSize: 90,
-                    topPadding: 7,
+                    topPadding: 4,
                     leftPadding: 13,
                     pageRoute: UserDevices()
                   ),
@@ -52,9 +54,9 @@ class Dashboard extends StatelessWidget {
                     width: 150,
                     imgPath: 'assets/cart.png',
                     imgSize: 85,
-                    topPadding: 10,
+                    topPadding: 8,
                     leftPadding: 11,
-                    pageRoute: QRScannerScreen()
+                    pageRoute: QRScannerScreen(isReturn: false)
                   ),
                 ],
               ),
@@ -70,7 +72,7 @@ class Dashboard extends StatelessWidget {
                     imgSize: 70,
                     topPadding: 13,
                     leftPadding: 27,
-                    pageRoute: QRScannerScreen()
+                    pageRoute: QRScannerScreen(isReturn: true)
                   ),
                   const SizedBox(width: 20),
                   CustomInkWell(
@@ -81,7 +83,9 @@ class Dashboard extends StatelessWidget {
                     imgSize: 65,
                     topPadding: 15,
                     leftPadding: 30,
-                    pageRoute: LoginPage()
+                    onTap: () {
+                      userLogout(context);
+                    },
                   ),
                 ],
               ),
@@ -117,5 +121,25 @@ class Dashboard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void userLogout(context) async {
+    final user = await ParseUser.currentUser() as ParseUser;
+    var response = await user.logout();
+
+    if (response.success) {
+      print('User successfully logged out');
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
+    } else {
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(response.error!.message),
+          );
+        }
+      );
+    }
   }
 }

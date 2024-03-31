@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'widgets.dart';
 import 'login.dart';
-import 'dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

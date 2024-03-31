@@ -47,7 +47,8 @@ class CustomInkWell extends StatelessWidget {
   final double imgSize;
   final double? topPadding;
   final double? leftPadding;
-  final Widget pageRoute;
+  final VoidCallback? onTap;
+  final Widget? pageRoute;
 
   const CustomInkWell({
     Key? key,
@@ -58,14 +59,19 @@ class CustomInkWell extends StatelessWidget {
     required this.imgSize,
     this.topPadding,
     this.leftPadding,
-    required this.pageRoute,
+    this.onTap,
+    this.pageRoute,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute));
+        if (onTap != null) {
+          onTap!();
+        } else {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute!));
+        }
       },
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -163,17 +169,21 @@ class CustomTextButton extends StatelessWidget {
 
   final String text;
   final double? width;
-  final Widget pageRoute;
+  final Widget? pageRoute;
 
-  // The button can optionally be attached to a list of controllers
+  // The button can optionally be attached to a list of controllers...
   final List<TextEditingController>? controllers;
+
+  // or to an 'onTap' callback
+  final VoidCallback? onPressed;
 
   const CustomTextButton({
     Key? key,
     required this.text,
     this.width,
-    required this.pageRoute,
+    this.pageRoute,
     this.controllers,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -183,35 +193,38 @@ class CustomTextButton extends StatelessWidget {
       width: width ?? (text.length <= 10 ? 100 : null),
       child: TextButton(
         onPressed: () {
-
-          // If controllers are passed, we check if they are all filled prior to routing the user
-          if (controllers != null) {
-            bool allFilled = true;
-            for (TextEditingController? controller in controllers!) {
-              if (controller == null || controller.text.isEmpty) {
-                allFilled = false;
-                break;
-              }
-            }
-            
-            if (allFilled) {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute));
-            }
-            else {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Error'),
-                    content: Text('Please fill in all fields'),
-                  );
-                },
-              );
-            }
-            
-          // If controllers aren't passed, we assume the button isn't conditional
+          if (onPressed != null) {
+            onPressed!();
           } else {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute));
+            // If controllers are passed, we check if they are all filled prior to routing the user
+            if (controllers != null) {
+              bool allFilled = true;
+              for (TextEditingController? controller in controllers!) {
+                if (controller == null || controller.text.isEmpty) {
+                  allFilled = false;
+                  break;
+                }
+              }
+              
+              if (allFilled) {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute!));
+              }
+              else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Error'),
+                      content: Text('Please fill in all fields'),
+                    );
+                  },
+                );
+              }
+              
+            // If controllers aren't passed, navigate to the page directly
+            } else {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => pageRoute!));
+            }          
           }          
         },
         style: ButtonStyle(

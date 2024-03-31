@@ -162,7 +162,7 @@ class _LoginPage extends State<LoginPage> {
             content: Text(response.error!.message),
           );
         }
-      );   
+      );
     }
   }
 }

@@ -4,7 +4,6 @@
 import 'package:fiu_csl_checkin/login.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'login.dart';
 import 'widgets.dart';
 
 class SignupPage extends StatefulWidget {
