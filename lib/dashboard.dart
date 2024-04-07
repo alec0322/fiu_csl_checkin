@@ -29,6 +29,8 @@ class Dashboard extends StatelessWidget {
       ),
       backgroundColor: const Color.fromARGB(255, 8, 30, 63),
       body: SingleChildScrollView(
+        child: PopScope (
+        canPop: false,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -120,6 +122,7 @@ class Dashboard extends StatelessWidget {
           ),
         ),
       ),
+    )
     );
   }
 
