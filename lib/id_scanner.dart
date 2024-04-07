@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'interface/text_recognizer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'widgets.dart';
@@ -260,9 +261,23 @@ class _IDScanner extends State<IDScanner> {
                     fontSize: 16
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (nameController.text.isNotEmpty && pantherIDController.text.isNotEmpty) {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard()));
+
+                    var name = nameController.text;
+                    var pantherId = pantherIDController.text;
+                    bool userExists = await checkUserExists(name, pantherId);
+                    
+                    // Check if the ID has ever been used before
+                    if (!userExists) {
+                      // If not, register User
+                      registerUser(name, pantherId);
+                    }
+
+                    String? userObjectId = await getObjectIdByPantherId(pantherId);
+
+                    // Here the One Card login is guaranteed to be true
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard(isOneCardLogin: true, userObjectId: userObjectId)));
                   } else {
                     showDialog(
                       context: context, 
@@ -292,5 +307,54 @@ class _IDScanner extends State<IDScanner> {
         ),
       ),
     );
+  }
+
+  Future<bool> checkUserExists(name, pantherId) async {
+    try {
+      QueryBuilder<ParseObject> retrieveUser = QueryBuilder(ParseObject('PID_User'))
+        ..whereEqualTo('pantherId', pantherId);
+
+      ParseResponse apiResponse = await retrieveUser.query();
+
+      List<ParseObject> user = apiResponse.result;
+
+      return user.isNotEmpty;
+    } catch (e) {
+      throw Exception('Error querying the database: $e');
+    }
+  }
+
+  void registerUser(name, pantherId) async {
+    ParseObject pidUser = ParseObject('PID_User');
+
+    pidUser.set<String>('name', name);
+    pidUser.set<String>('pantherId', pantherId);
+
+    try {
+      await pidUser.save();
+      print('New PID User created successfully: ${pidUser.objectId}');
+    } catch (e) {
+      throw Exception('Failed to create new user: $e');
+    }
+  }
+
+  Future<String?> getObjectIdByPantherId(String pantherId) async {
+    try {
+      QueryBuilder<ParseObject> queryBuilder = QueryBuilder<ParseObject>(ParseObject('PID_User'))
+        ..whereEqualTo('pantherId', pantherId);
+
+      ParseResponse response = await queryBuilder.query();
+
+      List<ParseObject>? results = response.result;
+
+      if (results != null && results.isNotEmpty) {
+        return results[0].objectId;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error while fetching objectId: $e');
+      return null;
+    }
   }
 }

@@ -8,11 +8,27 @@ import 'qr_scanner.dart';
 import 'widgets.dart';
 import 'user_devices.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
+
+  final bool isOneCardLogin;
+  final String? userObjectId;
 
   const Dashboard({
-    Key? key
+    Key? key,
+    required this.isOneCardLogin,
+    this.userObjectId
   }) : super(key: key);
+
+  @override
+  _Dashboard createState() => _Dashboard();
+}
+
+class _Dashboard extends State<Dashboard> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +63,7 @@ class Dashboard extends StatelessWidget {
                     imgSize: 90,
                     topPadding: 4,
                     leftPadding: 13,
-                    pageRoute: UserDevices()
+                    pageRoute: UserDevices(isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)
                   ),
                   const SizedBox(width: 20),
                   CustomInkWell(
@@ -58,7 +74,7 @@ class Dashboard extends StatelessWidget {
                     imgSize: 85,
                     topPadding: 8,
                     leftPadding: 11,
-                    pageRoute: QRScannerScreen(isReturn: false)
+                    pageRoute: QRScannerScreen(isReturn: false, isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)
                   ),
                 ],
               ),
@@ -74,7 +90,7 @@ class Dashboard extends StatelessWidget {
                     imgSize: 70,
                     topPadding: 13,
                     leftPadding: 27,
-                    pageRoute: QRScannerScreen(isReturn: true)
+                    pageRoute: QRScannerScreen(isReturn: true, isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)
                   ),
                   const SizedBox(width: 20),
                   CustomInkWell(
@@ -86,7 +102,12 @@ class Dashboard extends StatelessWidget {
                     topPadding: 15,
                     leftPadding: 30,
                     onTap: () {
-                      userLogout(context);
+                      if (widget.isOneCardLogin) {
+                        // The session for users logged in with one cards is handled differently, no need to log out
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
+                      } else {
+                        userLogout(context);
+                      }
                     },
                   ),
                 ],

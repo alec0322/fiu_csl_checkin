@@ -152,7 +152,8 @@ class _LoginPage extends State<LoginPage> {
 
     if (response.success) {
       setState(() {});
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
+      // Here the One Card login is guaranteed to be false
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard(isOneCardLogin: false)));
     } else {
       showDialog(
         context: context, 

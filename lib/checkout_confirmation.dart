@@ -10,10 +10,14 @@ import 'widgets.dart';
 class ConfirmationPage extends StatefulWidget {
 
   final ParseObject device;
+  final bool isOneCardLogin;
+  final String? userObjectId;
 
   const ConfirmationPage({
     Key? key,
     required this.device,
+    required this.isOneCardLogin,
+    required this.userObjectId
   }) : super(key: key);
 
   @override
@@ -22,14 +26,18 @@ class ConfirmationPage extends StatefulWidget {
 
 class _ConfirmationPage extends State<ConfirmationPage> {
 
-  late ParseUser currentUser;
+  ParseUser? currentUser;
 
   TextEditingController rentalDaysController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
+    // Handle user session regularly if the user has an account
+    print(widget.userObjectId);
+    if (!widget.isOneCardLogin) {
+      getCurrentUser();
+    }
     print('Current device: ${widget.device}');
   }
 
@@ -55,7 +63,7 @@ class _ConfirmationPage extends State<ConfirmationPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const QRScannerScreen(isReturn: false)));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => QRScannerScreen(isReturn: false, isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)));
           },
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -114,7 +122,7 @@ class _ConfirmationPage extends State<ConfirmationPage> {
                   text: 'Confirm',
                   onPressed: () {
                     print('Renting...');
-                    rentDevice(currentUser, widget.device);
+                    rentDevice(widget.device);
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -127,8 +135,9 @@ class _ConfirmationPage extends State<ConfirmationPage> {
                               onPressed: () {
                                 // Close the dialog
                                 Navigator.of(context).pop();
+
                                 // Redirect the user to the dashboard
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard()));
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard(isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)));
                               },
                             ),
                           ],
@@ -145,9 +154,16 @@ class _ConfirmationPage extends State<ConfirmationPage> {
     );
   }
 
-  Future<void> rentDevice(ParseUser user, ParseObject device) async {
+  Future<void> rentDevice(ParseObject device) async {
      try {
-      device..set('currentRenter', user.objectId);
+
+      if (widget.isOneCardLogin) {
+        print(widget.userObjectId);
+        device..set('currentRenter', widget.userObjectId);
+      }
+      else {
+        device..set('currentRenter', currentUser!.objectId);
+      }
 
       // Calculate rental time based on given rental days
       int rentalDays = int.parse(rentalDaysController.text.trim());
