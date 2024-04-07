@@ -9,11 +9,15 @@ import 'dashboard.dart';
 class QRScannerScreen extends StatefulWidget {
 
   // Extremely important boolean, determines whether a scan is a return or rental
-  final bool isReturn;
+  final bool isReturn;  
+  final bool isOneCardLogin;
+  final String? userObjectId;
 
   const QRScannerScreen({
     Key? key,
-    required this.isReturn,
+    required this.isReturn, 
+    required this.isOneCardLogin,
+    required this.userObjectId
   }) : super(key: key);
 
   @override
@@ -22,8 +26,8 @@ class QRScannerScreen extends StatefulWidget {
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
 
-  late ParseUser currentUser;
-  String? objectId;
+  ParseUser? currentUser;
+  String? deviceObjectId;
   StreamSubscription? scanSubscription;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -31,7 +35,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
+    // Handle user session regularly if the user has an account
+    if (!widget.isOneCardLogin) {
+      getCurrentUser();
+    }
   }
 
   void getCurrentUser() async {
@@ -62,7 +69,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Dashboard()));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Dashboard(isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)));
           },
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -103,10 +110,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     });
     scanSubscription = controller.scannedDataStream.listen((scanData) {
       setState(() {
-        objectId = scanData.code;
+        deviceObjectId = scanData.code;
 
         if (widget.isReturn) {
-          returnDevice(currentUser);
+          returnDevice();
         } else {
           proceedToCheckout();
         }
@@ -122,19 +129,21 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     }
   }
 
-  void returnDevice(ParseUser user) async {
+  void returnDevice() async {
     print('The user is returning a device');
 
     this.controller?.dispose();
     this.scanSubscription?.cancel();
 
-    print('Scanned device: ${objectId}');
+    print('Scanned device: ${deviceObjectId}');
 
     // Check if device is being rented by the current user
     try {
-      ParseObject device = await getDevice(objectId);
+      ParseObject device = await getDevice(deviceObjectId);
 
-      if (device['currentRenter'] == user.objectId) {
+      String? objectId = widget.userObjectId != null ? widget.userObjectId! : currentUser!.objectId;
+
+      if (device['currentRenter'] == objectId) {
 
         // Detach the user from the device... 
         device..set('currentRenter', null);
@@ -159,7 +168,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                       // Close the dialog
                       Navigator.of(context).pop();
                       // Redirect the user to the dashboard
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard(isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)));
                     },
                   )
                 ],
@@ -199,17 +208,16 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     this.controller?.dispose();
     this.scanSubscription?.cancel();
 
-    print('Scanned device: ${objectId}');
+    print('Scanned device: ${deviceObjectId}');
 
     // Check if device scanned is already being rented
-    bool rented = await isDeviceRented(objectId);
+    bool rented = await isDeviceRented(deviceObjectId);
 
     if (!rented) {
       // Allow the user to proceed to rental confirmation
-      ParseObject device = await getDevice(objectId);
+      ParseObject device = await getDevice(deviceObjectId);
 
-      // Ensure the widget is still mounted before navigating
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ConfirmationPage(device: device)));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ConfirmationPage(device: device, isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)));
     } else {
       showDialog(
         context: context, 
@@ -223,10 +231,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     }
   }
 
-  Future<ParseObject> getDevice(objectId) async {    
+  Future<ParseObject> getDevice(deviceObjectId) async {    
     try {
       QueryBuilder<ParseObject> retrieveDevice = QueryBuilder<ParseObject>(ParseObject('Devices'))
-        ..whereEqualTo('objectId', objectId);
+        ..whereEqualTo('objectId', deviceObjectId);
 
       ParseResponse apiResponse = await retrieveDevice.query();
 
@@ -239,9 +247,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     }
   }
 
-  Future<bool> isDeviceRented(objectId) async {    
+  Future<bool> isDeviceRented(deviceObjectId) async {    
     try {
-      ParseObject device = await getDevice(objectId);
+      ParseObject device = await getDevice(deviceObjectId);
       // Check if the device has a 'currentRenter'
       String? currentRenter = device.get<String>('currentRenter');
       String? deviceName = device.get<String>('deviceName');

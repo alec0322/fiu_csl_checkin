@@ -6,8 +6,13 @@ import 'dashboard.dart';
 
 class UserDevices extends StatefulWidget {
 
+  final bool isOneCardLogin;
+  final String? userObjectId;
+
   const UserDevices({
     Key? key,
+    required this.isOneCardLogin,
+    required this.userObjectId
   }) : super(key: key);
 
   @override
@@ -16,12 +21,15 @@ class UserDevices extends StatefulWidget {
 
 class _UserDevices extends State<UserDevices> {
 
-  late ParseUser currentUser;
+  ParseUser? currentUser;
 
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
+    // Handle user session regularly if the user has an account
+    if (!widget.isOneCardLogin) {
+      getCurrentUser();
+    }
   }
 
   void getCurrentUser() async {
@@ -46,14 +54,14 @@ class _UserDevices extends State<UserDevices> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Dashboard()));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Dashboard(isOneCardLogin: widget.isOneCardLogin, userObjectId: widget.userObjectId)));
           },
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color.fromARGB(255, 33, 66, 116),
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: fetchDevicesRented(currentUser),
+        future: fetchDevicesRented(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While the future is still running, show a loading indicator
@@ -164,10 +172,13 @@ class _UserDevices extends State<UserDevices> {
     );
   }
 
-  Future<List<dynamic>>? fetchDevicesRented(user) async {
+  Future<List<dynamic>>? fetchDevicesRented() async {
     try {
+
+      String? objectId = widget.userObjectId != null ? widget.userObjectId! : currentUser!.objectId;
+
       QueryBuilder<ParseObject> retrieveDevices = QueryBuilder<ParseObject>(ParseObject('Devices'))
-        ..whereEqualTo('currentRenter', user.objectId);
+        ..whereEqualTo('currentRenter', objectId);
 
       ParseResponse apiResponse = await retrieveDevices.query();
 
