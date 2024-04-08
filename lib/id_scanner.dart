@@ -316,13 +316,14 @@ class _IDScanner extends State<IDScanner> {
 
       ParseResponse apiResponse = await retrieveUser.query();
 
-      List<ParseObject> user = apiResponse.result;
+      List user = apiResponse.results ?? [];
 
       return user.isNotEmpty;
     } catch (e) {
       throw Exception('Error querying the database: $e');
     }
   }
+
 
   void registerUser(name, pantherId) async {
     ParseObject pidUser = ParseObject('PID_User');
