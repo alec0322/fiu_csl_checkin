@@ -1,5 +1,7 @@
 // widgets.dart
 // File used to define reusable UI components, such as custom text fields.
+// widgets.dart
+// File used to define reusable UI components, such as custom text fields.
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
