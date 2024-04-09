@@ -37,7 +37,7 @@ class RecognitionResponse {
   });
 
   @override
-  bool operator == (covariant RecognitionResponse other) {
+  bool operator ==(covariant RecognitionResponse other) {
     if (identical(this, other)) return true;
 
     return other.imgPath == imgPath && other.recognizedText == recognizedText;
@@ -78,9 +78,7 @@ class _IDScanner extends State<IDScanner> {
     super.dispose();
     nameController.dispose();
     pantherIDController.dispose();
-    if(_recognizer is MLKitTextRecognizer) {
-      (_recognizer as MLKitTextRecognizer).dispose();
-    }
+    (_recognizer as MLKitTextRecognizer).dispose();
   }
 
   Future<String?> obtainImage(ImageSource source) async {
@@ -89,8 +87,8 @@ class _IDScanner extends State<IDScanner> {
   }
 
   Widget imagePickAlert({
-    void Function()? onCameraPressed,
-    void Function()? onGalleryPressed,
+    required void Function() onCameraPressed,
+    required void Function() onGalleryPressed,
   }) {
     return AlertDialog(
       title: const Text(
@@ -167,8 +165,8 @@ class _IDScanner extends State<IDScanner> {
         title: const Text(
           'FIU One Card Details',
           style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold
+              color: Colors.white,
+              fontWeight: FontWeight.bold
           ),
         ),
         leading: IconButton(
@@ -192,43 +190,43 @@ class _IDScanner extends State<IDScanner> {
                   'You may enter the details yourself or scan your card:',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
                   ),
                 ),
               ),
               const SizedBox(height: 25),
               CustomTextField(
-                hintText: 'Name (First & Last)',
-                controller: nameController
+                  hintText: 'Name (First & Last)',
+                  controller: nameController
               ),
               const SizedBox(height: 20),
               CustomTextField(
-                hintText: 'Panther ID',
-                controller: pantherIDController
+                  hintText: 'Panther ID',
+                  controller: pantherIDController
               ),
               const SizedBox(height: 40),
-              ElevatedButton(                
+              ElevatedButton(
                 onPressed: () {
                   showDialog(
-                    context: context,
-                    builder: (context) => imagePickAlert(
-                      onCameraPressed: () async {
-                        // Pick image from Camera
-                        final imgPath = await obtainImage(ImageSource.camera);
-                        if (imgPath == null) return;
-                        processImage(imgPath);
-                        Navigator.of(context).pop();
-                      },
-                      onGalleryPressed: () async {
-                        // Pick image from Gallery
-                        final imgPath = await obtainImage(ImageSource.gallery);
-                        if (imgPath == null) return;
-                        processImage(imgPath);
-                        Navigator.of(context).pop();
-                      }
-                    )
+                      context: context,
+                      builder: (context) => imagePickAlert(
+                          onCameraPressed: () async {
+                            // Pick image from Camera
+                            final imgPath = await obtainImage(ImageSource.camera);
+                            if (imgPath == null) return;
+                            processImage(imgPath);
+                            Navigator.of(context).pop();
+                          },
+                          onGalleryPressed: () async {
+                            // Pick image from Gallery
+                            final imgPath = await obtainImage(ImageSource.gallery);
+                            if (imgPath == null) return;
+                            processImage(imgPath);
+                            Navigator.of(context).pop();
+                          }
+                      )
                   );
                 },
                 style: ButtonStyle(
@@ -236,20 +234,20 @@ class _IDScanner extends State<IDScanner> {
                     const Size(100, 50),
                   ),
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    const Color.fromARGB(255, 33, 66, 116)
+                      const Color.fromARGB(255, 33, 66, 116)
                   ),
                   shape: MaterialStateProperty.all<OutlinedBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)
+                        borderRadius: BorderRadius.circular(8.0)
                     ),
                   ),
                 ),
                 child: const Text(
-                  'Scan One Card',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  )
+                    'Scan One Card',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    )
                 ),
               ),
               const SizedBox(height: 20),
@@ -257,8 +255,8 @@ class _IDScanner extends State<IDScanner> {
                 child: const Text(
                   'Proceed to dashboard',
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16
+                      color: Colors.white,
+                      fontSize: 16
                   ),
                 ),
                 onPressed: () async {
@@ -267,7 +265,7 @@ class _IDScanner extends State<IDScanner> {
                     var name = nameController.text;
                     var pantherId = pantherIDController.text;
                     bool userExists = await checkUserExists(name, pantherId);
-                    
+
                     // Check if the ID has ever been used before
                     if (!userExists) {
                       // If not, register User
@@ -280,14 +278,14 @@ class _IDScanner extends State<IDScanner> {
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Dashboard(isOneCardLogin: true, userObjectId: userObjectId)));
                   } else {
                     showDialog(
-                      context: context, 
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Error'),
-                          content: Text('Please make sure both fields are filled'),
-                        );
-                      }
-                    );  
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content: Text('Please make sure both fields are filled'),
+                          );
+                        }
+                    );
                   }
                 },
                 style: ButtonStyle(
@@ -297,7 +295,7 @@ class _IDScanner extends State<IDScanner> {
                   backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 33, 66, 116)),
                   shape: MaterialStateProperty.all<OutlinedBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)
+                        borderRadius: BorderRadius.circular(8.0)
                     ),
                   ),
                 ),
@@ -309,7 +307,7 @@ class _IDScanner extends State<IDScanner> {
     );
   }
 
-  Future<bool> checkUserExists(name, pantherId) async {
+  Future<bool> checkUserExists(String name, String pantherId) async {
     try {
       QueryBuilder<ParseObject> retrieveUser = QueryBuilder(ParseObject('PID_User'))
         ..whereEqualTo('pantherId', pantherId);
@@ -325,7 +323,7 @@ class _IDScanner extends State<IDScanner> {
   }
 
 
-  void registerUser(name, pantherId) async {
+  void registerUser(String name, String pantherId) async {
     ParseObject pidUser = ParseObject('PID_User');
 
     pidUser.set<String>('name', name);

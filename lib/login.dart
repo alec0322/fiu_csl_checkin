@@ -42,6 +42,8 @@ class _LoginPage extends State<LoginPage> {
         backgroundColor: const Color.fromARGB(255, 33, 66, 116),
       ),
       body: SingleChildScrollView(
+        child: PopScope(
+        canPop: false,
         child: Container(
           color: const Color.fromARGB(255, 8, 30, 63),
           padding: const EdgeInsets.all(45.0),
@@ -139,6 +141,7 @@ class _LoginPage extends State<LoginPage> {
           ),
         ),
       )
+    )
     );
   }
 

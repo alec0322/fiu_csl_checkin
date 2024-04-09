@@ -4,6 +4,8 @@
 <dict>
     <key>NSCameraUsageDescription</key>
     <string>FIU CSL Checkin needs access to the camera to scan QR codes for item check out.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>FIU CSL Checkin needs access to your library in order to upload images.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
