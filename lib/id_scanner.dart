@@ -213,6 +213,7 @@ class _IDScanner extends State<IDScanner> {
                       context: context,
                       builder: (context) => imagePickAlert(
                           onCameraPressed: () async {
+                            await scanningGuidelines(context);
                             // Pick image from Camera
                             final imgPath = await obtainImage(ImageSource.camera);
                             if (imgPath == null) return;
@@ -355,5 +356,29 @@ class _IDScanner extends State<IDScanner> {
       print('Error while fetching objectId: $e');
       return null;
     }
+  }
+  Future<void> scanningGuidelines(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(
+              style: TextStyle(
+                fontSize: 18, // Adjust the font size as needed
+                fontWeight: FontWeight.bold,
+              ),
+              'Please make sure you scan your FIU One Card on a flat, clean surface'),
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
