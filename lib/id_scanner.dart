@@ -363,9 +363,11 @@ class _IDScanner extends State<IDScanner> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: Text(
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18, // Adjust the font size as needed
                 fontWeight: FontWeight.bold,
+
               ),
               'Please make sure you scan your FIU One Card on a flat, clean surface'),
 
