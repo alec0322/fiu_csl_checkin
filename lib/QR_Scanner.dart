@@ -86,21 +86,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   }
 
   Widget _buildQRView(BuildContext context) {
-    var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400)
-      ? 150.0
-      : 300.0;
-    
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        borderColor: Color.fromARGB(255, 182, 134, 44),
-        borderRadius: 10,
-        borderLength: 30,
-        borderWidth: 10,
-        cutOutSize: scanArea),
-        onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p
-      ),
+      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }
 
