@@ -121,10 +121,12 @@ class _IDScanner extends State<IDScanner> {
   }
 
   void updateTextFields(String name, String pantherID) {
-    setState(() {
-      nameController.text = name;
-      pantherIDController.text = pantherID;
-    });
+    if (mounted) {
+      setState(() {
+        nameController.text = name;
+        pantherIDController.text = pantherID;
+      });
+    }
   }
 
   void processImage(String imgPath) async {
