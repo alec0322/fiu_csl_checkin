@@ -1,11 +1,11 @@
 # FIU CSL Check-in
-iOS and Android IoT management system to manage devices within the Cyber-Physical Systems Security Lab (CSL) at FIU.
+iOS and Android IoT management system to manage devices within the Cyber-Physical Systems Security Lab (CSL) at FIU. Developed for the Capstone II class.
 
 ## Prerequisites 
 
 - **Flutter**: https://docs.flutter.dev/get-started/install/windows/mobile
 - **Git**: https://gitforwindows.org/
-    - Version 2.4 or later
+    - Preferred version
 - **Android Studio**: https://developer.android.com/studio/archive 
     - Version 2022.3.1 Patch 4 (Android Studio Giraffe)
     - Make sure to leave Android Virtual Device checked during installation, as it will be used for debugging.
